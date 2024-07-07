@@ -3,3 +3,5 @@ export * from "./selectors";
 export * from "./post";
 export * from "./search";
 export * from "./pagination";
+export * from "./modal";
+export * from "./lightbox";

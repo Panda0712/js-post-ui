@@ -12,11 +12,14 @@ import {
 dayjs.extend(relativeTime);
 
 // handle change the page based on the URL
-async function handleFilterChange(filterName, filterValue) {
+export async function handleFilterChange(filterName, filterValue) {
   // update query param
   const url = new URL(window.location);
-  url.searchParams.set(filterName, filterValue);
   // reset page if needed
+  url.searchParams.set(filterName, filterValue);
+
+  history.pushState({}, "", url);
+
   if (filterName === "title_like") {
     url.searchParams.set("_page", 1);
   }
@@ -30,11 +33,13 @@ async function handleFilterChange(filterName, filterValue) {
 }
 
 // set URL by the query params
-function getSearchParams() {
+export function getSearchParams() {
   const url = new URL(window.location);
 
-  if (!url.searchParams.get("_page")) url.searchParams.set("_page", 1);
-  if (!url.searchParams.get("_limit")) url.searchParams.set("_limit", 10);
+  if (!url.searchParams.get("id")) {
+    if (!url.searchParams.get("_page")) url.searchParams.set("_page", 1);
+    if (!url.searchParams.get("_limit")) url.searchParams.set("_limit", 10);
+  }
 
   history.pushState({}, "", url);
   return url.searchParams;
@@ -63,5 +68,7 @@ function getSearchParams() {
     const { data, pagination } = await postApi.getAll(queryParams);
     renderPostList("postList", data);
     renderPagination("postsPagination", pagination);
-  } catch (error) {}
+  } catch (error) {
+    console.log("error fetching at home.js: ", error);
+  }
 })();
