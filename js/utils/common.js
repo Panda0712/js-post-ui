@@ -11,6 +11,17 @@ export function setImageSrc(selector, query, post) {
   }
 }
 
+export function setBackgroundSrc(query, post) {
+  const element = document.getElementById(query);
+  if (element) {
+    element.style.backgroundImage = `url(${post})`;
+
+    element.addEventListener("error", () => {
+      element.style.backgroundImage = `url("https://placehold.jp/1368x400.png")`;
+    });
+  }
+}
+
 export function setTextContent(selector, query, post) {
   if (!selector) return;
 
