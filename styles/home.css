@@ -26,8 +26,20 @@
 }
 
 /* Show menu on card hover */
+.posts-section li{
+  position: relative;
+}
 .posts-section .post-item {
   position: relative;
+}
+
+.posts-section .post-item .card {
+  min-height: 380px;
+}
+
+.posts-section .post-item .card-text[data-id="description"] {
+  height: 50px;
+  margin-bottom:30px;
 }
 
 .posts-section .post-item .post-item-menu {

@@ -30,7 +30,7 @@ export function setTextContent(selector, query, post) {
 }
 
 export function truncate(text, length) {
-  if (text.length <= length) return;
+  if (text.length <= length) return text;
 
   return `${text.slice(0, length - 1)}…`;
 }
