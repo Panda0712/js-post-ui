@@ -5,32 +5,51 @@ import {
   handleShowImageChange,
   setInputValue,
   setBackgroundSrc,
+  toast,
+  showLoading,
+  hideLoading,
 } from "./utils";
 
 // handle add or edit post
-async function handlePatchData(data, postData, postHeroSectionID) {
+async function handlePatchData(data, postData, postHeroSectionID, submitting) {
   if (!data) return;
 
   const postHeroImage = document.getElementById(postHeroSectionID);
   if (!postHeroImage) return;
 
-  if (postData) {
-    await postApi.update({
-      id: postData.id,
-      title: data.title,
-      author: data.author,
-      description: data.description,
-      imageUrl: postHeroImage.style.backgroundImage.slice(5, -2),
-    });
-    window.location.assign(`/post-detail.html?id=${postData.id}`);
-  } else {
-    const newPost = await postApi.add({
-      title: data.title,
-      author: data.author,
-      description: data.description,
-      imageUrl: postHeroImage.style.backgroundImage.slice(5, -2),
-    });
-    window.location.assign(`/post-detail.html?id=${newPost.id}`);
+  const submitButton = document.querySelector('[name="submit"]');
+  if (!submitButton) return;
+
+  if (submitting) return;
+
+  showLoading(submitButton);
+  submitting = true;
+
+  try {
+    const postMode = postData
+      ? await postApi.update({
+          id: postData.id,
+          title: data.title,
+          author: data.author,
+          description: data.description,
+          imageUrl: postHeroImage.style.backgroundImage.slice(5, -2),
+        })
+      : await postApi.add({
+          title: data.title,
+          author: data.author,
+          description: data.description,
+          imageUrl: postHeroImage.style.backgroundImage.slice(5, -2),
+        });
+
+    hideLoading(submitButton);
+    submitting = false;
+
+    toast.success("Save post successfully");
+    setTimeout(() => {
+      window.location.assign(`/post-detail.html?id=${postMode.id}`);
+    }, 1000);
+  } catch (e) {
+    toast.error(`Error saving post: ${e.message}`);
   }
 }
 
@@ -63,6 +82,8 @@ function handleRenderPostData({
   });
 
   const postID = queryParams.get("id");
+  let submitting = false;
+
   if (!postID) {
     // Gọi hàm Validator và truyền vào object của form cần validate
     Validator({
@@ -77,7 +98,7 @@ function handleRenderPostData({
         Validator.minLength('textarea[name="description"]', 10),
       ],
       onSubmit: function (data) {
-        handlePatchData(data, postID, "postHeroImage");
+        handlePatchData(data, postID, "postHeroImage", submitting);
       },
     });
   } else {
@@ -103,7 +124,7 @@ function handleRenderPostData({
           Validator.minLength('textarea[name="description"]', 10),
         ],
         onSubmit: function (data) {
-          handlePatchData(data, postData, "postHeroImage");
+          handlePatchData(data, postData, "postHeroImage", submitting);
         },
       });
     } catch (error) {
