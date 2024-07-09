@@ -3,6 +3,8 @@ import {
   Validator,
   handleRadioAndButton,
   handleShowImageChange,
+  setInputValue,
+  setBackgroundSrc,
 } from "./utils";
 
 // handle add or edit post
@@ -40,22 +42,10 @@ function handleRenderPostData({
   postAuthor,
   postDescription,
 }) {
-  const postHeroSection = document.getElementById(postHeroImage);
-  const postTitleInput = document.querySelector(postTitle);
-  const postAuthorInput = document.querySelector(postAuthor);
-  const postDescriptionInput = document.querySelector(postDescription);
-  if (
-    !postHeroSection ||
-    !postTitleInput ||
-    !postAuthorInput ||
-    !postDescriptionInput
-  )
-    return;
-
-  postHeroSection.style.backgroundImage = `url(${postData.imageUrl})`;
-  postTitleInput.value = postData.title;
-  postAuthorInput.value = postData.author;
-  postDescriptionInput.value = postData.description;
+  setBackgroundSrc(postHeroImage, postData.imageUrl);
+  setInputValue(document, postTitle, postData.title);
+  setInputValue(document, postAuthor, postData.author);
+  setInputValue(document, postDescription, postData.description);
 }
 
 (async () => {

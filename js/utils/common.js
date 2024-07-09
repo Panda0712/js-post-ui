@@ -29,6 +29,13 @@ export function setTextContent(selector, query, post) {
   if (element) element.textContent = post;
 }
 
+export function setInputValue(selector, query, post) {
+  if (!selector) return;
+
+  const element = selector.querySelector(query);
+  if (element) element.value = post;
+}
+
 export function truncate(text, length) {
   if (text.length <= length) return text;
 

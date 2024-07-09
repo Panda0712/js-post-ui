@@ -29,11 +29,14 @@ export function createPostElement(post) {
   setTextContent(liElement, "[data-id='timeSpan']", timeSpan);
 
   // attach events
-  liElement.addEventListener("click", () => {
-    // easy solution: window.location.assign(`/post-detail.html?id=${post.id}`)
-    const url = new URL("http://localhost:5173/post-detail.html");
-    url.searchParams.set("id", post.id);
-    window.location.href = url;
+  liElement.addEventListener("click", (event) => {
+    if (event.target.closest('[data-id="edit"'))
+      window.location.assign(`/add-edit-post.html?id=${post.id}`);
+    else {
+      const url = new URL("http://localhost:5173/post-detail.html");
+      url.searchParams.set("id", post.id);
+      window.location.href = url;
+    }
   });
 
   return liElement;
