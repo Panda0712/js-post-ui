@@ -7,3 +7,4 @@ export * from "./modal";
 export * from "./lightbox";
 export * from "./validation";
 export * from "./add-edit-post-events";
+export * from "./toast";

@@ -1,5 +1,16 @@
 import axios from "axios";
 
+// handle disabled/enabled submit button
+export function showLoading(submitButton) {
+  submitButton.disabled = true;
+  submitButton.textContent = "Saving...";
+}
+
+export function hideLoading(submitButton) {
+  submitButton.disabled = false;
+  submitButton.textContent = "Save";
+}
+
 // handle change random post image button
 export async function handleChangePostImageButton(postHeroSection) {
   try {
